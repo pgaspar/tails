@@ -2,6 +2,8 @@
 
 require 'tails/version'
 require 'tails/routing'
+require 'tails/util'
+require 'tails/dependencies'
 
 module Tails
   class Application
