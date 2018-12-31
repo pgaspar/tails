@@ -4,6 +4,7 @@ require 'tails/version'
 require 'tails/routing'
 require 'tails/util'
 require 'tails/dependencies'
+require 'tails/controller'
 
 module Tails
   class Application
@@ -43,14 +44,6 @@ module Tails
 
     def root_request?(env)
       env['PATH_INFO'] == '/'
-    end
-  end
-
-  class Controller
-    attr_reader :env
-
-    def initialize(env)
-      @env = env
     end
   end
 end
