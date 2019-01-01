@@ -1,7 +1,10 @@
 # require 'erubis'
+require 'tails/file_model'
 
 module Tails
   class Controller
+    include Tails::Model
+
     attr_reader :env
 
     def initialize(env)
