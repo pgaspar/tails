@@ -33,6 +33,25 @@ module Tails
         files = Dir[DB_DIR + '*.json']
         files.map { |f| FileModel.new(f) }
       end
+
+      def self.create(attrs)
+        data = {}
+        data['submitter'] = attrs['submitter'] || ''
+        data['quote'] = attrs['quote'] || ''
+        data['attribution'] = attrs['attribution'] || ''
+
+        files = Dir[DB_DIR + '*.json']
+        names = files.map { |f| File.split(f).last }
+        highest = names.map(&:to_i).max
+        id = highest + 1
+
+        filepath = DB_DIR + "#{id}.json"
+        File.open(filepath, 'w') do |f|
+          f.write MultiJson.dump(data, pretty: true)
+        end
+
+        FileModel.new(filepath)
+      end
     end
   end
 end
