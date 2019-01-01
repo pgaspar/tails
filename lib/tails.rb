@@ -12,8 +12,7 @@ module Tails
       return not_found if favicon_request?(env)
       return default_response if root_request?(env)
 
-      router = Routing.new
-      klass, action = router.get_controller_and_action(env)
+      klass, action = get_controller_and_action(env)
 
       controller = klass.new(env)
       body = controller.public_send(action.to_sym)
