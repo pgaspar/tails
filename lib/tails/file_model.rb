@@ -3,6 +3,8 @@ require 'multi_json'
 module Tails
   module Model
     class FileModel
+      DB_DIR = 'db/quotes/'.freeze
+
       def initialize(filename)
         @filename = filename
 
@@ -22,9 +24,14 @@ module Tails
       end
 
       def self.find(id)
-        FileModel.new("db/quotes/#{id}.json")
+        FileModel.new(DB_DIR + "#{id}.json")
       rescue
         nil
+      end
+
+      def self.all
+        files = Dir[DB_DIR + '*.json']
+        files.map { |f| FileModel.new(f) }
       end
     end
   end
