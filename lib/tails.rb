@@ -5,6 +5,7 @@ require 'tails/routing'
 require 'tails/util'
 require 'tails/dependencies'
 require 'tails/controller'
+require 'tails/file_model'
 
 module Tails
   class Application
