@@ -1,5 +1,6 @@
 # require 'erubis'
 require 'tails/file_model'
+require 'rack/request'
 
 module Tails
   class Controller
@@ -24,9 +25,12 @@ module Tails
       Tails.to_underscore klass_name
     end
 
+    def request
+      @request ||= Rack::Request.new(env)
+    end
+
     def params
-      param_pairs = env['QUERY_STRING'].split('&').map { |str| str.split('=') }
-      Hash[param_pairs]
+      request.params
     end
   end
 end
