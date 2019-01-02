@@ -23,5 +23,10 @@ module Tails
       klass_name = klass.to_s.gsub(/Controller$/, '')
       Tails.to_underscore klass_name
     end
+
+    def params
+      param_pairs = env['QUERY_STRING'].split('&').map { |str| str.split('=') }
+      Hash[param_pairs]
+    end
   end
 end
