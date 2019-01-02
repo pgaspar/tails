@@ -23,6 +23,13 @@ module Tails
         @hash[name.to_s] = value
       end
 
+      def save
+        filepath = DB_DIR + "#{@id}.json"
+        File.open(filepath, 'w') do |f|
+          f.write MultiJson.dump(@hash, pretty: true)
+        end
+      end
+
       def self.find(id)
         FileModel.new(DB_DIR + "#{id}.json")
       rescue
