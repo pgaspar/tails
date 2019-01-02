@@ -5,6 +5,8 @@ module Tails
     class FileModel
       DB_DIR = 'db/quotes/'.freeze
 
+      attr_reader :id
+
       def initialize(filename)
         @filename = filename
 
