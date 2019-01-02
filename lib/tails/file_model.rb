@@ -36,6 +36,10 @@ module Tails
         nil
       end
 
+      def self.find_all_by_submitter(submitter)
+        all.select { |q| q['submitter'] == submitter }
+      end
+
       def self.all
         files = Dir[DB_DIR + '*.json']
         files.map { |f| FileModel.new(f) }
