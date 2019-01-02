@@ -17,7 +17,12 @@ module Tails
 
       controller = klass.new(env)
       body = controller.public_send(action.to_sym)
-      ok body
+
+      if (r = controller.get_response)
+        [r.status, r.headers, r.body]
+      else
+        ok body
+      end
     end
 
     private

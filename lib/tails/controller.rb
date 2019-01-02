@@ -16,7 +16,8 @@ module Tails
       filename = File.join 'app', 'views', controller_name, "#{view_name}.html.erb"
       template = File.read filename
       eruby = Erubis::Eruby.new(template)
-      eruby.result locals.merge(env: env)
+      text = eruby.result locals.merge(env: env)
+      response text
     end
 
     def controller_name
@@ -31,6 +32,20 @@ module Tails
 
     def params
       request.params
+    end
+
+    def response(text, status = 200, headers = { 'Content-Type' => 'text/html' })
+      raise 'Already responded!' if @response
+
+      @response = Rack::Response.new(
+        [text].flatten,
+        status,
+        headers
+      )
+    end
+
+    def get_response
+      @response
     end
   end
 end
