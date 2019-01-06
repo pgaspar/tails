@@ -105,6 +105,27 @@ module Tails
       def fields
         @hash
       end
+
+      def method_missing(method_name, *args, &block)
+        if self.class.schema.include?(method_name.to_s)
+          self.class.send(:define_method, method_name) do
+            fields[method_name.to_s]
+          end
+          public_send(method_name)
+        elsif self.class.schema.include?(method_name.to_s.delete('='))
+          field_name = method_name.to_s.delete('=')
+          self.class.send(:define_method, method_name) do |value|
+            fields[field_name] = value
+          end
+          public_send(method_name, *args)
+        else
+          super
+        end
+      end
+
+      def respond_to_missing?(method_name, include_private = false)
+        self.class.schema.include?(method_name.to_s.delete('=')) || super
+      end
     end
   end
 end
