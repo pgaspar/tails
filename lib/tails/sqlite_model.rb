@@ -7,7 +7,7 @@ DB = SQLite3::Database.new DB_NAME
 module Tails
   module Model
     class SQLite
-      def initialize(data = nil)
+      def initialize(data = {})
         @hash = data
       end
 
@@ -59,6 +59,33 @@ module Tails
         new(data)
       end
 
+      def save!
+        unless @hash['id']
+          new_instance = self.class.create(@hash)
+
+          new_instance.fields.each do |k, v|
+            self[k] = v
+          end
+
+          return true
+        end
+
+        fields = @hash.map do |k, v|
+          "#{k}=#{self.class.to_sql(v)}"
+        end
+
+        DB.execute <<~SQL
+          UPDATE #{self.class.table}
+          SET #{fields.join(',')}
+          WHERE id = '#{@hash['id']}';
+        SQL
+        true
+      end
+
+      def save
+        save! rescue false
+      end
+
       def self.count
         DB.execute("SELECT COUNT(*) FROM #{table};")[0][0]
       end
@@ -73,6 +100,10 @@ module Tails
             schema[row['name']] = row['type']
           end
         end
+      end
+
+      def fields
+        @hash
       end
     end
   end
